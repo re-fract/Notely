@@ -1,4 +1,4 @@
-# Notely (AIdeation) — React + Vite + Express
+# Notely — React + Vite + Express
 
 A React + Vite frontend with a separate Express backend. Features AI-assisted note taking, thumbnail generation, rich text editing, and Neon + Drizzle persistence.
 
