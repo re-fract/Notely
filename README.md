@@ -1,221 +1,152 @@
-# AIdeation - React + Vite + Express
+# Notely (AIdeation) — React + Vite + Express
 
-This project has been converted from a Next.js 13.4 App Router application to a standard React application with a separate Express backend.
+A React + Vite frontend with a separate Express backend. Features AI-assisted note taking, thumbnail generation, rich text editing, and Neon + Drizzle persistence.
 
 ## Project Structure
 
 ```
 react-app/
 ├── src/                    # React frontend
-│   ├── components/         # React components
-│   │   ├── ui/            # Shadcn UI components
+│   ├── components/         # UI + editor components
+│   │   ├── ui/             # Shadcn-style primitives
 │   │   ├── CreateNoteDialog.tsx
 │   │   ├── DeleteButton.tsx
 │   │   ├── ProtectedRoute.tsx
 │   │   ├── TipTapEditor.tsx
 │   │   ├── TipTapMenuBar.tsx
 │   │   └── UserButton.tsx
-│   ├── contexts/          # React contexts
+│   ├── contexts/           # Auth + app contexts
 │   │   └── AuthContext.tsx
-│   ├── lib/               # Utility functions
+│   ├── lib/                # Utilities & types
 │   │   ├── types.ts
 │   │   ├── useDebounce.ts
 │   │   └── utils.ts
-│   ├── pages/             # Page components
+│   ├── pages/              # Routed pages
 │   │   ├── Dashboard.tsx
 │   │   ├── Home.tsx
 │   │   ├── Notebook.tsx
 │   │   ├── SignIn.tsx
 │   │   └── SignUp.tsx
-│   ├── App.tsx            # Main app with routing
-│   ├── index.css          # Global styles
-│   └── main.tsx           # Entry point
+│   ├── App.tsx             # Routing setup
+│   ├── index.css
+│   └── main.tsx
 ├── server/                 # Express backend
-│   ├── db/                # Database configuration
-│   │   ├── index.ts
-│   │   └── schema.ts
-│   ├── lib/               # Utility libraries
-│   │   ├── firebase.ts
-│   │   └── openai.ts
-│   ├── routes/            # API routes
+│   ├── db/
+│   │   ├── index.ts        # Neon + Drizzle init
+│   │   └── schema.ts       # Tables: users, notes
+│   ├── lib/
+│   │   ├── ai.ts           # Groq completions + image prompts
+│   │   └── supabase.ts     # Supabase storage uploads
+│   ├── routes/
 │   │   ├── auth.ts
 │   │   ├── completion.ts
-│   │   ├── firebase.ts
 │   │   ├── note.ts
-│   │   └── notebook.ts
-│   └── index.ts           # Express server entry
-├── package.json           # Frontend dependencies
-├── vite.config.ts         # Vite configuration
-├── tailwind.config.js     # Tailwind CSS configuration
-└── tsconfig.json          # TypeScript configuration
+│   │   ├── notebook.ts
+│   │   └── storage.ts
+│   └── index.ts            # Server entry
+├── package.json            # Frontend scripts
+├── vite.config.ts          # Dev server + proxy
+├── tailwind.config.js
+└── tsconfig.json
 ```
 
-## Key Architectural Changes
+## Quickstart
 
-### 1. Routing
-- **Before**: Next.js App Router with file-based routing
-- **After**: React Router DOM with explicit route definitions in `App.tsx`
-
-### 2. Server-Side Logic
-- **Before**: Next.js API routes (`/api/*`) and server components
-- **After**: Separate Express.js server with equivalent API endpoints
-
-### 3. Authentication
-- **Before**: Clerk authentication with Next.js middleware
-- **After**: Custom auth context with localStorage persistence (replaceable with any auth provider)
-
-### 4. Data Fetching
-- **Before**: Server components with direct database access
-- **After**: Client-side fetching via API calls
-
-### 5. Image Optimization
-- **Before**: Next.js `Image` component with automatic optimization
-- **After**: Standard HTML `img` tags (consider adding a CDN for production)
-
-### 6. Environment Variables
-- **Before**: `process.env.VARIABLE`
-- **After**: Frontend uses `import.meta.env.VITE_VARIABLE`, backend uses `process.env.VARIABLE`
-
-## Getting Started
-
-### 1. Install Dependencies
+### 1) Install dependencies
 
 ```bash
-# Install frontend dependencies
+# Frontend
 cd react-app
 npm install
 
-# Install backend dependencies
+# Backend
 cd server
 npm install
 ```
 
-### 2. Set Up Environment Variables
+### 2) Configure environment
+
+- Frontend: copy [.env.example](.env.example) → `.env` (optional; the Vite dev proxy handles `/api`).
+- Backend: copy [server/.env.example](server/.env.example) → `server/.env` and fill values.
+
+Backend `.env` keys used by the app:
+- `PORT` (default 5000)
+- `CLIENT_URL` (default http://localhost:3000)
+- `DATABASE_URL` (Neon PostgreSQL)
+- `GROQ_API_KEY` (for AI completions)
+- `SUPABASE_URL`, `SUPABASE_ANON_KEY` (public bucket `note-images`)
+
+### 3) Run locally
 
 ```bash
-# Frontend (.env in react-app folder)
-cp .env.example .env
-
-# Backend (.env in server folder)
-cd server
-cp .env.example .env
-# Edit .env with your actual values
-```
-
-### 3. Set Up Database
-
-The project uses Drizzle ORM with Neon PostgreSQL. Your existing database should work without changes.
-
-```bash
-# Generate migrations if needed
-cd server
-npx drizzle-kit generate:pg
-```
-
-### 4. Run the Application
-
-```bash
-# Terminal 1: Start the backend
-cd react-app/server
-npm run dev
-
-# Terminal 2: Start the frontend
-cd react-app
-npm run dev
-```
-
-Or use concurrently:
-```bash
+# Option A: run both with one command
 cd react-app
 npm run dev:all
+
+# Option B: separate terminals
+# Terminal 1
+cd react-app/server
+npm run dev
+# Terminal 2
+cd react-app
+npm run dev
 ```
 
-### 5. Access the Application
+- Frontend: http://localhost:3000 (see [vite.config.ts](vite.config.ts), proxies `/api` → `http://localhost:5000`)
+- Backend: http://localhost:5000
 
-- Frontend: http://localhost:3000
-- Backend API: http://localhost:5000
+## Tech Highlights
 
-## Features Preserved
-
-✅ AI-powered note taking with OpenAI GPT-3.5  
-✅ DALL·E image generation for note thumbnails  
-✅ Rich text editing with TipTap  
-✅ Auto-save functionality with debouncing  
-✅ Firebase storage for images  
-✅ Neon PostgreSQL database with Drizzle ORM  
-✅ Tailwind CSS styling with Shadcn UI components  
-✅ Responsive design  
-✅ Typewriter animation on homepage  
-
-## Trade-offs and Considerations
-
-### Benefits of Migration
-1. **No vendor lock-in**: Standard React/Express stack
-2. **Deployment flexibility**: Deploy frontend and backend separately
-3. **Easier debugging**: Clear separation of concerns
-4. **Scalability**: Backend can be scaled independently
-
-### Considerations
-1. **No SSR/SSG**: Pages are client-rendered (can add with React frameworks if needed)
-2. **Manual image optimization**: Consider using a CDN or image service
-3. **Two servers**: Requires running both frontend and backend
-4. **CORS handling**: API calls require proper CORS configuration
-
-## Authentication Note
-
-The current implementation uses a simple auth context with localStorage. For production, consider:
-
-- **Firebase Auth**: Already using Firebase for storage
-- **Auth0**: Enterprise-ready authentication
-- **Supabase Auth**: If migrating database
-- **JWT tokens**: For stateless authentication
-
-## Database
-
-The database schema remains unchanged:
-
-```typescript
-export const $notes = pgTable('notes', {
-  id: serial('id').primaryKey(),
-  name: text('name').notNull(),
-  createdAt: timestamp('created_at').notNull().defaultNow(),
-  imageUrl: text('imageUrl'),
-  userId: text('user_id').notNull(),
-  editorState: text('editor_state'),
-});
-```
+- React + Vite + TypeScript, Tailwind + Shadcn-style components
+- TipTap rich text editor with autosave (debounced)
+- AI text completion via Groq (Llama 3.1)
+- Thumbnail images via Pollinations.ai (free) → stored in Supabase
+- Data: Neon PostgreSQL + Drizzle ORM
 
 ## API Endpoints
 
-| Endpoint | Method | Description |
-|----------|--------|-------------|
-| `/api/auth/signup` | POST | Create new user |
-| `/api/auth/signin` | POST | Sign in user |
-| `/api/auth/user` | GET | Get current user |
-| `/api/notes` | GET | Get all user notes |
-| `/api/notes/:noteId` | GET | Get single note |
-| `/api/createNoteBook` | POST | Create new notebook |
-| `/api/deleteNote` | POST | Delete a note |
-| `/api/saveNote` | PUT | Save note content |
-| `/api/uploadToFirebase` | POST | Upload image to Firebase |
-| `/api/completion` | POST | AI text completion |
+Auth
+- `POST /api/auth/signup` — create user
+- `POST /api/auth/signin` — sign in
+- `GET /api/auth/user` — get current user (requires `x-user-id` header)
 
-## Production Deployment
+Notes
+- `GET /api/notes` — list notes for current user (`x-user-id`)
+- `GET /api/notes/:noteId` — get single note (`x-user-id`)
+- `POST /api/deleteNote` — delete note (body: `noteId`)
+- `PUT /api/saveNote` — save editor state (body: `noteId`, `editorState`)
 
-### Frontend (Vercel/Netlify)
+Notebook & Media
+- `POST /api/createNoteBook` — create notebook (body: `name`, header `x-user-id`); generates thumbnail via AI → Pollinations
+- `POST /api/uploadToStorage` — upload existing thumbnail URL to Supabase and persist URL
+
+AI
+- `POST /api/completion` — short autocomplete response based on prompt
+
+## Development Notes
+
+- Vite dev server runs on port 3000 and proxies `/api`.
+- CORS is allowed from `CLIENT_URL` (default `http://localhost:3000`).
+- Store the signed-in user in localStorage (see [src/contexts/AuthContext.tsx](src/contexts/AuthContext.tsx)).
+- Drizzle schema: see [server/db/schema.ts](server/db/schema.ts).
+
+## Build & Deploy
+
+Frontend
 ```bash
+cd react-app
 npm run build
-# Deploy the dist folder
+# Deploy the generated dist/ to your host (Vercel/Netlify/etc.)
 ```
 
-### Backend (Railway/Render/AWS)
+Backend
 ```bash
-cd server
+cd react-app/server
 npm run build
 npm start
 ```
 
-Remember to:
-1. Set environment variables in production
-2. Update CORS origins for production URLs
-3. Use secure authentication in production
+Production checklist
+- Set all backend environment variables
+- Update `CLIENT_URL` and CORS
+- Use secure auth (hash passwords, add proper auth provider)
