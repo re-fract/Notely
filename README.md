@@ -240,17 +240,6 @@ Core use cases:
 1. Client calls `POST /api/completion` with a short `prompt`.
 2. Backend responds with a concise completion (plain text) suitable to append to the editor.
 
-## Limitations
-
-## Why React + Vite + Express?
-
-## Contributing
-
-Pull requests welcome. Please:
-- Match the TypeScript + ESLint style (run `npm run lint`).
-- Keep routes small and focused; prefer adding to `server/routes/*`.
-- Update docs when changing API or behavior.
-
 
 ## Why React + Vite + Express?
 
