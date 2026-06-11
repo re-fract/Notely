@@ -3,11 +3,16 @@ dotenv.config();
 
 import express from 'express';
 import cors from 'cors';
+import path from 'path';
+import { fileURLToPath } from 'url';
 import { completionRouter } from './routes/completion.js';
 import { notebookRouter } from './routes/notebook.js';
 import { noteRouter } from './routes/note.js';
 import { storageRouter } from './routes/storage.js';
 import { authRouter } from './routes/auth.js';
+
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = path.dirname(__filename);
 
 const app = express();
 const PORT = process.env.PORT || 5000;
@@ -19,7 +24,7 @@ app.use(cors({
 }));
 app.use(express.json());
 
-// Routes
+// API Routes
 app.use('/api/completion', completionRouter);
 app.use('/api/createNoteBook', notebookRouter);
 app.use('/api/deleteNote', noteRouter);
@@ -32,6 +37,17 @@ app.use('/api/notes', noteRouter);
 app.get('/api/health', (_req, res) => {
   res.json({ status: 'ok' });
 });
+
+// Serve static frontend files in production
+if (process.env.NODE_ENV === 'production') {
+  const distPath = path.join(__dirname, '..', '..', 'dist');
+  app.use(express.static(distPath));
+
+  // Fallback: serve index.html for any non-API route (SPA routing)
+  app.get('*', (_req, res) => {
+    res.sendFile(path.join(distPath, 'index.html'));
+  });
+}
 
 app.listen(PORT, () => {
   console.log(`Server running on port ${PORT}`);

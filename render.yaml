@@ -1,0 +1,17 @@
+services:
+  - type: web
+    name: notely
+    runtime: node
+    plan: free
+    buildCommand: npm install && npm run build && cd server && npm install && npm run build
+    startCommand: cd server && NODE_ENV=production npm start
+    envVars:
+      - key: NODE_ENV
+        value: production
+      - key: PORT
+        value: 10000
+      # Add your database and API keys below in the Render dashboard
+      # - key: DATABASE_URL
+      # - key: GROQ_API_KEY
+      # - key: SUPABASE_URL
+      # - key: SUPABASE_ANON_KEY
