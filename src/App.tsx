@@ -1,6 +1,7 @@
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 import { AuthProvider } from './contexts/AuthContext';
+import { ThemeProvider } from './contexts/ThemeContext';
 import Home from './pages/Home';
 import Dashboard from './pages/Dashboard';
 import Notebook from './pages/Notebook';
@@ -13,7 +14,8 @@ const queryClient = new QueryClient();
 function App() {
   return (
     <QueryClientProvider client={queryClient}>
-      <AuthProvider>
+      <ThemeProvider>
+        <AuthProvider>
         <Router>
           <Routes>
             <Route path="/" element={<Home />} />
@@ -38,6 +40,7 @@ function App() {
           </Routes>
         </Router>
       </AuthProvider>
+      </ThemeProvider>
     </QueryClientProvider>
   );
 }

@@ -1,5 +1,7 @@
 node_modules
+server/node_modules
 dist
+server/dist
 
 # Environment files
 .env
@@ -21,6 +23,9 @@ Thumbs.db
 # Testing/coverage
 coverage
 *.lcov
+*.test.tsx
+*.test.ts
+src/test/
 
 # TypeScript
 *.tsbuildinfo
@@ -28,3 +33,9 @@ coverage
 # Caches
 .eslintcache
 .vite
+
+# Claude Stuff
+redesign_images_stitch/
+skills/
+CLAUDE.md
+redesign_code_stitch.txt

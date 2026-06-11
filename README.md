@@ -1,4 +1,4 @@
-# Notely (AIdeation)
+# Notely
 
 AI-assisted note taking built with React (Vite) and an Express backend. It provides rich-text editing (TipTap), quick AI autocompletion (Groq), simple thumbnail generation (Pollinations), and persistent storage via Neon + Drizzle, with images saved to Supabase Storage.
 
@@ -239,17 +239,6 @@ Core use cases:
 ### Autocomplete Flow
 1. Client calls `POST /api/completion` with a short `prompt`.
 2. Backend responds with a concise completion (plain text) suitable to append to the editor.
-
-## Limitations
-
-## Why React + Vite + Express?
-
-## Contributing
-
-Pull requests welcome. Please:
-- Match the TypeScript + ESLint style (run `npm run lint`).
-- Keep routes small and focused; prefer adding to `server/routes/*`.
-- Update docs when changing API or behavior.
 
 
 ## Why React + Vite + Express?

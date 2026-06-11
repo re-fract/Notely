@@ -20,16 +20,15 @@ router.post('/', async (req, res) => {
       return res.status(400).json({ error: 'Name is required' });
     }
 
-    // Generate image description using AI
-    const imageDescription = await generateImagePrompt(name);
-    if (!imageDescription) {
-      return res.status(500).json({ error: 'Failed to generate image description' });
-    }
-
-    // Generate image using free service (Pollinations.ai)
-    const imageUrl = await generateImage(imageDescription);
-    if (!imageUrl) {
-      return res.status(500).json({ error: 'Failed to generate image' });
+    // Generate image description using AI (optional - falls back to placeholder)
+    let imageUrl: string;
+    try {
+      const imageDescription = await generateImagePrompt(name);
+      const generatedUrl = await generateImage(imageDescription);
+      imageUrl = generatedUrl || `https://placehold.co/256x256/e2e2e2/1a1c1c?text=${encodeURIComponent(name.slice(0, 15))}`;
+    } catch {
+      // AI generation failed (e.g. no API key) - use a placeholder
+      imageUrl = `https://placehold.co/256x256/e2e2e2/1a1c1c?text=${encodeURIComponent(name.slice(0, 15))}`;
     }
 
     const note_ids = await db
