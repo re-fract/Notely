@@ -98,6 +98,14 @@ const TipTapEditor = ({ note }: TipTapEditorProps) => {
 
   if (!editor) return null;
 
+  /** Helper for toolbar buttons: handles isActive hover states */
+  const btn = (active: boolean, extra = '') =>
+    `w-8 h-8 flex items-center justify-center border-r border-gray-300 dark:border-gray-700 transition-colors ${extra} ${
+      active
+        ? 'bg-black text-white hover:bg-gray-800 dark:hover:bg-gray-700'
+        : 'hover:bg-gray-100 dark:hover:bg-[#2a2a2a] text-black dark:text-white'
+    }`;
+
   return (
     <div className="flex flex-col h-full">
       {/* Sticky Formatting Toolbar */}
@@ -108,9 +116,7 @@ const TipTapEditor = ({ note }: TipTapEditorProps) => {
             <button
               type="button"
               onClick={() => editor.chain().focus().toggleBold().run()}
-              className={`w-8 h-8 flex items-center justify-center hover:bg-gray-100 dark:hover:bg-[#2a2a2a] border-r border-gray-300 dark:border-gray-700 transition-colors ${
-                editor.isActive('bold') ? 'bg-black text-white' : ''
-              }`}
+              className={btn(editor.isActive('bold'))}
               title="Bold"
             >
               <span className="material-symbols-outlined text-sm font-bold">format_bold</span>
@@ -118,9 +124,7 @@ const TipTapEditor = ({ note }: TipTapEditorProps) => {
             <button
               type="button"
               onClick={() => editor.chain().focus().toggleItalic().run()}
-              className={`w-8 h-8 flex items-center justify-center hover:bg-gray-100 dark:hover:bg-[#2a2a2a] border-r border-gray-300 dark:border-gray-700 transition-colors ${
-                editor.isActive('italic') ? 'bg-black text-white' : ''
-              }`}
+              className={btn(editor.isActive('italic'))}
               title="Italic"
             >
               <span className="material-symbols-outlined text-sm italic">format_italic</span>
@@ -128,12 +132,14 @@ const TipTapEditor = ({ note }: TipTapEditorProps) => {
             <button
               type="button"
               onClick={() => editor.chain().focus().toggleStrike().run()}
-              className={`w-8 h-8 flex items-center justify-center hover:bg-gray-100 dark:hover:bg-[#2a2a2a] transition-colors ${
-                editor.isActive('strike') ? 'bg-black text-white' : ''
+              className={`w-8 h-8 flex items-center justify-center transition-colors ${
+                editor.isActive('strike')
+                  ? 'bg-black text-white hover:bg-gray-800 dark:hover:bg-gray-700'
+                  : 'hover:bg-gray-100 dark:hover:bg-[#2a2a2a] text-black dark:text-white'
               }`}
-              title="Underline"
+              title="Strikethrough"
             >
-              <span className="material-symbols-outlined text-sm underline">format_underlined</span>
+              <span className="material-symbols-outlined text-sm">format_strikethrough</span>
             </button>
           </div>
 
@@ -142,9 +148,7 @@ const TipTapEditor = ({ note }: TipTapEditorProps) => {
             <button
               type="button"
               onClick={() => editor.chain().focus().toggleHeading({ level: 1 }).run()}
-              className={`w-8 h-8 flex items-center justify-center hover:bg-gray-100 dark:hover:bg-[#2a2a2a] border-r border-gray-300 dark:border-gray-700 font-label-sm font-bold text-black dark:text-white transition-colors ${
-                editor.isActive('heading', { level: 1 }) ? 'bg-black text-white' : ''
-              }`}
+              className={btn(editor.isActive('heading', { level: 1 }), 'font-label-sm font-bold')}
               title="Heading 1"
             >
               H1
@@ -152,9 +156,7 @@ const TipTapEditor = ({ note }: TipTapEditorProps) => {
             <button
               type="button"
               onClick={() => editor.chain().focus().toggleHeading({ level: 2 }).run()}
-              className={`w-8 h-8 flex items-center justify-center hover:bg-gray-100 dark:hover:bg-[#2a2a2a] border-r border-gray-300 dark:border-gray-700 font-label-sm font-bold text-black dark:text-white transition-colors ${
-                editor.isActive('heading', { level: 2 }) ? 'bg-black text-white' : ''
-              }`}
+              className={btn(editor.isActive('heading', { level: 2 }), 'font-label-sm font-bold')}
               title="Heading 2"
             >
               H2
@@ -162,8 +164,10 @@ const TipTapEditor = ({ note }: TipTapEditorProps) => {
             <button
               type="button"
               onClick={() => editor.chain().focus().setParagraph().run()}
-              className={`w-8 h-8 flex items-center justify-center hover:bg-gray-100 dark:hover:bg-[#2a2a2a] font-label-sm text-black dark:text-white transition-colors ${
-                editor.isActive('paragraph') && !editor.isActive('heading') ? 'bg-black text-white' : ''
+              className={`w-8 h-8 flex items-center justify-center font-label-sm transition-colors ${
+                editor.isActive('paragraph') && !editor.isActive('heading')
+                  ? 'bg-black text-white hover:bg-gray-800 dark:hover:bg-gray-700'
+                  : 'hover:bg-gray-100 dark:hover:bg-[#2a2a2a] text-black dark:text-white'
               }`}
               title="Paragraph"
             >
@@ -176,9 +180,7 @@ const TipTapEditor = ({ note }: TipTapEditorProps) => {
             <button
               type="button"
               onClick={() => editor.chain().focus().toggleBulletList().run()}
-              className={`w-8 h-8 flex items-center justify-center hover:bg-gray-100 dark:hover:bg-[#2a2a2a] border-r border-gray-300 dark:border-gray-700 transition-colors ${
-                editor.isActive('bulletList') ? 'bg-black text-white' : ''
-              }`}
+              className={btn(editor.isActive('bulletList'))}
               title="Bullet List"
             >
               <span className="material-symbols-outlined text-sm">format_list_bulleted</span>
@@ -186,8 +188,10 @@ const TipTapEditor = ({ note }: TipTapEditorProps) => {
             <button
               type="button"
               onClick={() => editor.chain().focus().toggleOrderedList().run()}
-              className={`w-8 h-8 flex items-center justify-center hover:bg-gray-100 dark:hover:bg-[#2a2a2a] transition-colors ${
-                editor.isActive('orderedList') ? 'bg-black text-white' : ''
+              className={`w-8 h-8 flex items-center justify-center transition-colors ${
+                editor.isActive('orderedList')
+                  ? 'bg-black text-white hover:bg-gray-800 dark:hover:bg-gray-700'
+                  : 'hover:bg-gray-100 dark:hover:bg-[#2a2a2a] text-black dark:text-white'
               }`}
               title="Numbered List"
             >

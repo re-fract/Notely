@@ -1,11 +1,18 @@
+import { useNavigate } from 'react-router-dom';
 import { useAuth } from '../contexts/AuthContext';
 import { useTheme } from '../contexts/ThemeContext';
 
 const UserButton = () => {
   const { user, signOut } = useAuth();
   const { theme, toggleTheme } = useTheme();
+  const navigate = useNavigate();
 
   if (!user) return null;
+
+  const handleSignOut = () => {
+    signOut();
+    navigate('/');
+  };
 
   return (
     <div className="flex items-center gap-3">
@@ -25,7 +32,7 @@ const UserButton = () => {
         </span>
       </button>
       <button
-        onClick={signOut}
+        onClick={handleSignOut}
         className="w-8 h-8 flex items-center justify-center text-gray-500 hover:text-black hover:bg-gray-100 transition-colors border border-transparent hover:border-black"
         title="Sign out"
       >

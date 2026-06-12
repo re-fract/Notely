@@ -84,7 +84,7 @@ const SignIn = () => {
 
         {/* Form */}
         <div className="p-6">
-          <form onSubmit={handleSubmit} className="space-y-6 flex flex-col">
+          <form onSubmit={handleSubmit} className="space-y-6 flex flex-col animate-form-transition" key={isSignUp ? 'signup' : 'signin'}>
             {isSignUp && (
               <div className="grid grid-cols-2 gap-4">
                 <div className="flex flex-col gap-2">

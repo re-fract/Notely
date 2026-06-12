@@ -121,21 +121,13 @@ const Home = () => {
       </main>
 
       {/* Footer */}
-      <footer className="max-w-[1200px] mx-auto px-6 lg:px-12 flex flex-col md:flex-row justify-between items-center gap-4 w-full py-12 border-t-2 border-black">
-        <div className="font-label-md text-sm font-bold text-black">
-          Notely Knowledge Systems. Built for focus.
+      <footer className="max-w-[1200px] mx-auto px-6 lg:px-12 flex flex-col md:flex-row justify-between items-center gap-4 w-full py-8 border-t-2 border-black dark:border-white">
+        <div className="font-label-md text-sm font-bold text-black dark:text-white">
+          Notely. Built for focus.
         </div>
-        <nav className="flex gap-4 flex-wrap justify-center">
-          <a href="#" className="font-label-sm text-xs text-gray-600 hover:text-black hover:underline">
-            Privacy Policy
-          </a>
-          <a href="#" className="font-label-sm text-xs text-gray-600 hover:text-black hover:underline">
-            Terms of Service
-          </a>
-          <a href="#" className="font-label-sm text-xs text-gray-600 hover:text-black hover:underline">
-            Changelog
-          </a>
-        </nav>
+        <div className="font-label-sm text-xs text-gray-500 dark:text-gray-400">
+          React + Express + Tailwind
+        </div>
       </footer>
     </div>
   );
