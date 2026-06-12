@@ -136,15 +136,6 @@ const SignIn = () => {
                 <label className="font-label-sm text-xs text-black dark:text-white uppercase tracking-widest transition-colors" htmlFor="password">
                   Passphrase
                 </label>
-                {!isSignUp && (
-                  <a
-                    href="#"
-                    className="font-label-sm text-xs text-gray-500 dark:text-gray-400 hover:text-black dark:hover:text-white hover:underline transition-colors"
-                    tabIndex={-1}
-                  >
-                    Reset Key
-                  </a>
-                )}
               </div>
               <div className="relative">
                 <input
